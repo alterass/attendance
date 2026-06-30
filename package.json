@@ -8,14 +8,17 @@
     "check": "biome check --write",
     "dev": "rsbuild --open",
     "format": "biome format --write",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview",
+    "routes": "tsr generate"
   },
   "dependencies": {
     "@douyinfe/semi-icons": "^2.100.0",
     "@douyinfe/semi-ui": "^2.100.0",
     "@tanstack/react-router": "^1.170.16",
     "@tanstack/router-devtools": "^1.167.0",
+    "dayjs": "^1.11.21",
     "dexie": "^4.4.4",
+    "dexie-react-hooks": "^4.4.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "valtio": "^2.3.2"
@@ -25,6 +28,7 @@
     "@rsbuild/core": "^2.1.0",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rsbuild/plugin-tailwindcss": "^2.0.3",
+    "@tanstack/router-plugin": "^1.168.18",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
