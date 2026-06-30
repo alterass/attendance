@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rsbuild build",
     "check": "biome check --write",
-    "dev": "rsbuild --open",
+    "dev": "rsbuild --open --port 9981",
     "format": "biome format --write",
     "preview": "rsbuild preview",
     "routes": "tsr generate"
