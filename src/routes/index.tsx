@@ -3,6 +3,7 @@ import { Button, Space, Typography } from '@douyinfe/semi-ui';
 import { IconPlus, IconList } from '@douyinfe/semi-icons';
 import { useUser } from '../hooks/useUser';
 import { MonthStats } from '../components/MonthStats';
+import { CalendarView } from '../components/CalendarView';
 import { ExportButton } from '../components/ExportButton';
 import dayjs from 'dayjs';
 
@@ -42,6 +43,18 @@ function HomePage() {
           {dayjs().format('M月')}统计
         </Typography.Title>
         <MonthStats />
+      </div>
+
+      {/* 日历视图 */}
+      <div className="mb-6">
+        <Typography.Title heading={5} className="!mb-3 !text-gray-700">
+          考勤日历
+        </Typography.Title>
+        <CalendarView
+          onDateClick={(start, end) => {
+            navigate({ to: '/records', search: { from: start, to: end } });
+          }}
+        />
       </div>
 
       {/* 操作按钮 */}

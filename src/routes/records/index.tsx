@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, DatePicker, Dropdown, Modal, Select, TextArea, Toast, Typography } from '@douyinfe/semi-ui';
 import { IconArrowLeft, IconImport, IconPlus } from '@douyinfe/semi-icons';
 import { useSnapshot } from 'valtio';
@@ -15,17 +15,34 @@ import {
 import { parseAttendanceText } from '../../utils/parse-text';
 import { db } from '../../db';
 import type { AttendanceRecord } from '../../types';
+import dayjs from 'dayjs';
 
 export const Route = createFileRoute('/records/')({
   component: RecordsListPage,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      from: typeof search.from === 'number' ? search.from : undefined,
+      to: typeof search.to === 'number' ? search.to : undefined,
+    };
+  },
 });
 
 function RecordsListPage() {
   const navigate = useNavigate();
+  const { from, to } = Route.useSearch();
   const records = useFilteredRecords();
-  const { selectedIds } = useSnapshot(filterStore);
+  const { selectedIds, dateRange } = useSnapshot(filterStore);
   const [importVisible, setImportVisible] = useState(false);
   const [importText, setImportText] = useState('');
+
+  // 从路由参数初始化 dateRange
+  useEffect(() => {
+    if (from && to) {
+      filterStore.dateRange = [from, to];
+    } else {
+      filterStore.dateRange = null;
+    }
+  }, [from, to]);
 
   const handleImport = async () => {
     if (!importText.trim()) {
@@ -82,12 +99,12 @@ function RecordsListPage() {
   };
 
   const handleDateRangeChange = (
-    dates: [Date, Date] | Date | string | string[] | undefined,
+    dates: Date[] | Date | string | string[] | undefined,
   ) => {
     if (Array.isArray(dates) && dates.length === 2 && dates[0] instanceof Date) {
       filterStore.dateRange = [
-        (dates[0] as Date).getTime(),
-        (dates[1] as Date).getTime(),
+        dayjs(dates[0]).startOf('day').valueOf(),
+        dayjs(dates[1]).endOf('day').valueOf(),
       ];
     } else {
       filterStore.dateRange = null;
@@ -117,6 +134,7 @@ function RecordsListPage() {
         <DatePicker
           type="dateRange"
           placeholder={['开始日期', '结束日期']}
+          value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])] : undefined}
           onChange={handleDateRangeChange}
           density="compact"
           style={{ flex: 1 }}
