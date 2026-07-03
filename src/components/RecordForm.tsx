@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import { Button, DatePicker, Form, Select, TextArea } from '@douyinfe/semi-ui';
+import { Button, Form, Select } from '@douyinfe/semi-ui';
 import type { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import dayjs from 'dayjs';
+import { useRef } from 'react';
 import type { AttendanceRecord, RecordFormMode } from '../types';
 
 interface RecordFormProps {
@@ -17,7 +17,9 @@ interface RecordFormProps {
 }
 
 /** 根据考勤类型获取默认起止时间 */
-function getDefaultTimes(type: string): { beginTime: Date; overTime: Date } | null {
+function getDefaultTimes(
+  type: string,
+): { beginTime: Date; overTime: Date } | null {
   const today = dayjs();
   if (type === '加班') {
     return {
@@ -41,7 +43,7 @@ export function RecordForm({
   onEdit,
 }: RecordFormProps) {
   const disabled = mode === 'readonly';
-  const formApiRef = useRef<FormApi>();
+  const formApiRef = useRef<FormApi | undefined>(undefined);
   const prevBeginRef = useRef<Date | null>(null);
 
   const handleSubmit = (values: Record<string, unknown>) => {
@@ -54,7 +56,10 @@ export function RecordForm({
       const h = dayjs(overTime).hour();
       const m = dayjs(overTime).minute();
       if (h > 18 || (h === 18 && m > 0)) {
-        formApiRef.current?.setError('overTime', '调休/请假结束时间不能超过 18:00');
+        formApiRef.current?.setError(
+          'overTime',
+          '调休/请假结束时间不能超过 18:00',
+        );
         return;
       }
     }
@@ -65,16 +70,6 @@ export function RecordForm({
       beginTime: beginTime.getTime(),
       overTime: overTime.getTime(),
     });
-  };
-
-  const handleTypeChange = (value: string | number | (string | number)[] | undefined) => {
-    if (mode !== 'create' || !value || !formApiRef.current) return;
-    const defaults = getDefaultTimes(value as string);
-    if (defaults) {
-      formApiRef.current.setValue('beginTime', defaults.beginTime);
-      formApiRef.current.setValue('overTime', defaults.overTime);
-      prevBeginRef.current = defaults.beginTime;
-    }
   };
 
   const getInitValues = () => {
@@ -99,7 +94,9 @@ export function RecordForm({
       onSubmit={handleSubmit}
       initValues={getInitValues()}
       labelPosition="top"
-      getFormApi={(api) => { formApiRef.current = api; }}
+      getFormApi={(api) => {
+        formApiRef.current = api;
+      }}
     >
       <Form.Select
         field="type"
@@ -108,7 +105,15 @@ export function RecordForm({
         disabled={disabled}
         rules={[{ required: true, message: '请选择考勤类型' }]}
         style={{ width: '100%' }}
-        onChange={handleTypeChange}
+        onChange={(value) => {
+          if (mode !== 'create' || !value || !formApiRef.current) return;
+          const defaults = getDefaultTimes(value as string);
+          if (defaults) {
+            formApiRef.current.setValue('beginTime', defaults.beginTime);
+            formApiRef.current.setValue('overTime', defaults.overTime);
+            prevBeginRef.current = defaults.beginTime;
+          }
+        }}
       >
         <Select.Option value="加班">加班</Select.Option>
         <Select.Option value="调休">调休</Select.Option>
@@ -126,11 +131,16 @@ export function RecordForm({
         onChange={(date) => {
           if (!date || !formApiRef.current) return;
           const newBegin = date as Date;
-          const currentOver = formApiRef.current.getValue('overTime') as Date | undefined;
+          const currentOver = formApiRef.current.getValue('overTime') as
+            | Date
+            | undefined;
           if (currentOver && prevBeginRef.current) {
             const diff = currentOver.getTime() - prevBeginRef.current.getTime();
             if (diff > 0) {
-              formApiRef.current.setValue('overTime', new Date(newBegin.getTime() + diff));
+              formApiRef.current.setValue(
+                'overTime',
+                new Date(newBegin.getTime() + diff),
+              );
             }
           }
           prevBeginRef.current = newBegin;
@@ -194,4 +204,3 @@ export function RecordForm({
     </Form>
   );
 }
-

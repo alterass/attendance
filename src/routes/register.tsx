@@ -1,8 +1,7 @@
+import { Button, Form, Space, Toast, Typography } from '@douyinfe/semi-ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Button, Form, Space, Typography } from '@douyinfe/semi-ui';
-import { Toast } from '@douyinfe/semi-ui';
-import { db } from '../db';
 import { ImportButton } from '../components/ImportButton';
+import { db } from '../db';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -24,7 +23,7 @@ function RegisterPage() {
       });
       Toast.success('注册成功');
       navigate({ to: '/' });
-    } catch (err) {
+    } catch {
       Toast.error('注册失败');
     }
   };
@@ -34,10 +33,10 @@ function RegisterPage() {
       <div className="w-full max-w-md">
         {/* Logo 区域 */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 mb-4 shadow-lg">
             <span className="text-3xl">📋</span>
           </div>
-          <Typography.Title heading={2} className="gradient-text !mb-2">
+          <Typography.Title heading={2} className="gradient-text mb-2!">
             考勤记录器
           </Typography.Title>
           <Typography.Text type="tertiary">

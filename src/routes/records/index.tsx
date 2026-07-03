@@ -1,29 +1,46 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
-import { Button, DatePicker, Dropdown, Modal, Select, TextArea, Toast, Typography } from '@douyinfe/semi-ui';
 import { IconArrowLeft, IconImport, IconPlus } from '@douyinfe/semi-icons';
+import {
+  Button,
+  DatePicker,
+  Dropdown,
+  Modal,
+  Select,
+  TextArea,
+  Toast,
+  Typography,
+} from '@douyinfe/semi-ui';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { useSnapshot } from 'valtio';
-import { useFilteredRecords } from '../../hooks/useRecords';
-import { filterStore, toggleSelect, clearSelection, getSelectedIdsList, getSelectedCount } from '../../store/filter';
-import { appStore } from '../../store/app';
 import { RecordCard } from '../../components/RecordCard';
+import { db } from '../../db';
+import { useFilteredRecords } from '../../hooks/useRecords';
+import { appStore } from '../../store/app';
+import {
+  clearSelection,
+  filterStore,
+  getSelectedCount,
+  getSelectedIdsList,
+  toggleSelect,
+} from '../../store/filter';
+import type { AttendanceRecord } from '../../types';
 import {
   getLastWeekRecordIds,
   getThisMonthRecordIds,
   getThisWeekRecordIds,
 } from '../../utils/attendance-text';
 import { parseAttendanceText } from '../../utils/parse-text';
-import { db } from '../../db';
-import type { AttendanceRecord } from '../../types';
-import dayjs from 'dayjs';
 
 export const Route = createFileRoute('/records/')({
   component: RecordsListPage,
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      from: typeof search.from === 'number' ? search.from : undefined,
-      to: typeof search.to === 'number' ? search.to : undefined,
-    };
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { from?: number; to?: number } => {
+    const result: { from?: number; to?: number } = {};
+    if (typeof search.from === 'number') result.from = search.from;
+    if (typeof search.to === 'number') result.to = search.to;
+    return result;
   },
 });
 
@@ -66,7 +83,7 @@ function RecordsListPage() {
       Toast.success(`成功导入 ${newRecords.length} 条记录`);
       setImportVisible(false);
       setImportText('');
-    } catch (err) {
+    } catch {
       Toast.error('导入失败，请检查文本格式');
     }
   };
@@ -101,7 +118,11 @@ function RecordsListPage() {
   const handleDateRangeChange = (
     dates: Date[] | Date | string | string[] | undefined,
   ) => {
-    if (Array.isArray(dates) && dates.length === 2 && dates[0] instanceof Date) {
+    if (
+      Array.isArray(dates) &&
+      dates.length === 2 &&
+      dates[0] instanceof Date
+    ) {
       filterStore.dateRange = [
         dayjs(dates[0]).startOf('day').valueOf(),
         dayjs(dates[1]).endOf('day').valueOf(),
@@ -111,7 +132,9 @@ function RecordsListPage() {
     }
   };
 
-  const handleTypeChange = (value: string | number | (string | number)[] | undefined) => {
+  const handleTypeChange = (
+    value: string | number | (string | number)[] | undefined,
+  ) => {
     filterStore.type = (value as '加班' | '调休' | '请假') || null;
   };
 
@@ -124,7 +147,7 @@ function RecordsListPage() {
           theme="borderless"
           onClick={() => navigate({ to: '/' })}
         />
-        <Typography.Title heading={4} className="ml-2 !mb-0">
+        <Typography.Title heading={4} className="ml-2 mb-0!">
           考勤记录
         </Typography.Title>
       </div>
@@ -134,7 +157,11 @@ function RecordsListPage() {
         <DatePicker
           type="dateRange"
           placeholder={['开始日期', '结束日期']}
-          value={dateRange ? [new Date(dateRange[0]), new Date(dateRange[1])] : undefined}
+          value={
+            dateRange
+              ? [new Date(dateRange[0]), new Date(dateRange[1])]
+              : undefined
+          }
           onChange={handleDateRangeChange}
           density="compact"
           style={{ flex: 1 }}
@@ -234,7 +261,10 @@ function RecordsListPage() {
         title="从历史导入"
         visible={importVisible}
         onOk={handleImport}
-        onCancel={() => { setImportVisible(false); setImportText(''); }}
+        onCancel={() => {
+          setImportVisible(false);
+          setImportText('');
+        }}
         okText="导入"
         cancelText="取消"
         style={{ maxWidth: 480 }}
@@ -245,7 +275,9 @@ function RecordsListPage() {
         <TextArea
           value={importText}
           onChange={(v) => setImportText(v)}
-          placeholder={'日期与时间：2026.06-02  18:30 - 21:30\n考勤类型：加班 3h\n具体事由：需求评审'}
+          placeholder={
+            '日期与时间：2026.06-02  18:30 - 21:30\n考勤类型：加班 3h\n具体事由：需求评审'
+          }
           autosize={{ minRows: 8, maxRows: 16 }}
         />
       </Modal>

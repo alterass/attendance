@@ -1,7 +1,6 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Button, Typography } from '@douyinfe/semi-ui';
 import { IconArrowLeft } from '@douyinfe/semi-icons';
-import { Toast } from '@douyinfe/semi-ui';
+import { Button, Toast, Typography } from '@douyinfe/semi-ui';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { RecordForm } from '../../components/RecordForm';
 import { db } from '../../db';
 import { appStore } from '../../store/app';
@@ -35,7 +34,7 @@ function NewRecordPage() {
       await db.records.add(record);
       appStore.lastCreatedRecord = record;
       navigate({ to: '/records/success' });
-    } catch (err) {
+    } catch {
       Toast.error('新增失败');
     }
   };
@@ -48,7 +47,7 @@ function NewRecordPage() {
           theme="borderless"
           onClick={() => navigate({ to: '/' })}
         />
-        <Typography.Title heading={4} className="ml-2 !mb-0">
+        <Typography.Title heading={4} className="ml-2 mb-0!">
           新增考勤记录
         </Typography.Title>
       </div>

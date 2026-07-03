@@ -8,14 +8,19 @@ import type { AttendanceRecord } from '../types';
  * 考勤类型：加班 3h
  * 具体事由：陈列需求评审
  */
-export function parseAttendanceText(text: string): Omit<AttendanceRecord, 'id' | 'createAt' | 'updateAt'>[] {
+export function parseAttendanceText(
+  text: string,
+): Omit<AttendanceRecord, 'id' | 'createAt' | 'updateAt'>[] {
   const records: Omit<AttendanceRecord, 'id' | 'createAt' | 'updateAt'>[] = [];
 
   // 按空行分块
   const blocks = text.split(/\n\s*\n/).filter(Boolean);
 
   for (const block of blocks) {
-    const lines = block.trim().split('\n').map((l) => l.trim());
+    const lines = block
+      .trim()
+      .split('\n')
+      .map((l) => l.trim());
 
     let dateLine = '';
     let typeLine = '';
@@ -35,7 +40,9 @@ export function parseAttendanceText(text: string): Omit<AttendanceRecord, 'id' |
     if (!dateLine || !typeLine) continue;
 
     // 解析日期与时间：2026.06-02  18:30 - 21:30
-    const dateMatch = dateLine.match(/(\d{4})\.(\d{2})-(\d{2})\s+(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
+    const dateMatch = dateLine.match(
+      /(\d{4})\.(\d{2})-(\d{2})\s+(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/,
+    );
     if (!dateMatch) continue;
 
     const [, year, month, day, beginTimeStr, overTimeStr] = dateMatch;

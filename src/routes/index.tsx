@@ -1,11 +1,11 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { IconList, IconPlus } from '@douyinfe/semi-icons';
 import { Button, Space, Typography } from '@douyinfe/semi-ui';
-import { IconPlus, IconList } from '@douyinfe/semi-icons';
-import { useUser } from '../hooks/useUser';
-import { MonthStats } from '../components/MonthStats';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { CalendarView } from '../components/CalendarView';
 import { ExportButton } from '../components/ExportButton';
-import dayjs from 'dayjs';
+import { MonthStats } from '../components/MonthStats';
+import { useUser } from '../hooks/useUser';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -20,16 +20,16 @@ function HomePage() {
   return (
     <div className="min-h-screen p-4 max-w-lg mx-auto pt-6">
       {/* 顶部问候 */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
+      <div className="bg-linear-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
         <div className="flex justify-between items-start">
           <div>
-            <Typography.Text className="!text-white/70 !text-sm">
+            <Typography.Text className="text-white/70! text-sm!">
               {dayjs().format('YYYY年M月D日 dddd')}
             </Typography.Text>
-            <Typography.Title heading={3} className="!text-white !mt-1 !mb-1">
+            <Typography.Title heading={3} className="text-white! mt-1! mb-1!">
               你好，{user.name} 👋
             </Typography.Title>
-            <Typography.Text className="!text-white/60 !text-xs">
+            <Typography.Text className="text-white/60! text-xs!">
               {user.department}
             </Typography.Text>
           </div>
@@ -39,7 +39,7 @@ function HomePage() {
 
       {/* 当月统计 */}
       <div className="mb-6">
-        <Typography.Title heading={5} className="!mb-3 !text-gray-700">
+        <Typography.Title heading={5} className="mb-3! text-gray-700!">
           {dayjs().format('M月')}统计
         </Typography.Title>
         <MonthStats />
@@ -47,7 +47,7 @@ function HomePage() {
 
       {/* 日历视图 */}
       <div className="mb-6">
-        <Typography.Title heading={5} className="!mb-3 !text-gray-700">
+        <Typography.Title heading={5} className="mb-3! text-gray-700!">
           考勤日历
         </Typography.Title>
         <CalendarView

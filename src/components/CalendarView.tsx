@@ -24,15 +24,12 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
   const monthEnd = currentMonth.endOf('month').valueOf();
 
   // 查询当月记录
-  const records = useLiveQuery(
-    async () => {
-      return db.records
-        .where('beginTime')
-        .between(monthStart, monthEnd, true, true)
-        .toArray();
-    },
-    [monthStart, monthEnd],
-  );
+  const records = useLiveQuery(async () => {
+    return db.records
+      .where('beginTime')
+      .between(monthStart, monthEnd, true, true)
+      .toArray();
+  }, [monthStart, monthEnd]);
 
   // 构建日期→考勤类型映射
   const dateTypeMap = useMemo(() => {
@@ -43,7 +40,7 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
       if (!map.has(dateKey)) {
         map.set(dateKey, new Set());
       }
-      map.get(dateKey)!.add(r.type);
+      map.get(dateKey)?.add(r.type);
     }
     return map;
   }, [records]);
@@ -88,7 +85,7 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
           size="small"
           onClick={handlePrev}
         />
-        <Typography.Title heading={5} className="!mb-0">
+        <Typography.Title heading={5} className="mb-0!">
           {currentMonth.format('YYYY年M月')}
         </Typography.Title>
         <Button
@@ -112,6 +109,7 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
       <div className="grid grid-cols-7 gap-y-1">
         {calendarDays.map((day, idx) => {
           if (day === null) {
+            // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder for calendar grid alignment
             return <div key={`empty-${idx}`} className="h-10" />;
           }
 
@@ -120,7 +118,8 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
           const types = dateTypeMap.get(dateKey);
 
           return (
-            <div
+            <button
+              type="button"
               key={day}
               className={`flex flex-col items-center justify-center h-10 rounded-lg cursor-pointer transition-colors hover:bg-gray-100 ${isToday ? 'bg-indigo-50 font-bold' : ''}`}
               onClick={() => handleDayClick(day)}
@@ -140,7 +139,7 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
                   ))}
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
       </div>

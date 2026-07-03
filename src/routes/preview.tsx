@@ -1,7 +1,7 @@
+import { IconArrowLeft, IconCopy } from '@douyinfe/semi-icons';
+import { Button, Spin, Toast, Typography } from '@douyinfe/semi-ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { Button, Spin, Toast, Typography } from '@douyinfe/semi-ui';
-import { IconArrowLeft, IconCopy } from '@douyinfe/semi-icons';
 import { useSnapshot } from 'valtio';
 import { appStore } from '../store/app';
 import {
@@ -65,7 +65,7 @@ function PreviewPage() {
             theme="borderless"
             onClick={() => navigate({ to: '/records' })}
           />
-          <Typography.Title heading={4} className="ml-2 !mb-0">
+          <Typography.Title heading={4} className="ml-2 mb-0!">
             考勤申请预览
           </Typography.Title>
         </div>

@@ -10,7 +10,11 @@ export async function exportAllData(): Promise<void> {
   const data: ExportData = {
     version: 1,
     exportAt: Date.now(),
-    user: { name: user.name, department: user.department, offHour: user.offHour },
+    user: {
+      name: user.name,
+      department: user.department,
+      offHour: user.offHour,
+    },
     records,
   };
 

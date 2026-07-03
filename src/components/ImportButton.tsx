@@ -1,7 +1,6 @@
-import { useRef } from 'react';
-import { Button } from '@douyinfe/semi-ui';
 import { IconUpload } from '@douyinfe/semi-icons';
-import { Toast } from '@douyinfe/semi-ui';
+import { Button, Toast } from '@douyinfe/semi-ui';
+import { useRef } from 'react';
 import { importData } from '../utils/import';
 
 interface ImportButtonProps {
@@ -24,7 +23,9 @@ export function ImportButton({ onSuccess }: ImportButtonProps) {
       Toast.success('导入成功');
       onSuccess?.();
     } catch (err) {
-      Toast.error(`导入失败：${err instanceof Error ? err.message : '未知错误'}`);
+      Toast.error(
+        `导入失败：${err instanceof Error ? err.message : '未知错误'}`,
+      );
     }
 
     // 清空 input 使同一文件可再次选择

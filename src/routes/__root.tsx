@@ -1,6 +1,6 @@
 import {
-  Outlet,
   createRootRoute,
+  Outlet,
   useLocation,
   useNavigate,
 } from '@tanstack/react-router';

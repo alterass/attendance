@@ -1,6 +1,6 @@
-import { useLiveQuery } from 'dexie-react-hooks';
-import dayjs from 'dayjs';
 import { Typography } from '@douyinfe/semi-ui';
+import dayjs from 'dayjs';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
 import { calcHours } from '../utils/time';
 
@@ -69,7 +69,7 @@ export function MonthStats() {
             className={`${item.bg} rounded-2xl p-4 text-center transition-transform hover:scale-105`}
           >
             <div className="text-2xl mb-1">{item.emoji}</div>
-            <Typography.Text type="tertiary" size="small" className="!text-xs">
+            <Typography.Text type="tertiary" size="small" className="text-xs!">
               {item.label}
             </Typography.Text>
             <div className={`text-2xl font-bold mt-1 ${item.text}`}>
@@ -82,10 +82,15 @@ export function MonthStats() {
       <div className="bg-purple-50 rounded-2xl p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xl">⚡</span>
-          <Typography.Text type="tertiary" size="small">加班 - 调休</Typography.Text>
+          <Typography.Text type="tertiary" size="small">
+            加班 - 调休
+          </Typography.Text>
         </div>
-        <div className={`text-2xl font-bold ${diff >= 0 ? 'text-purple-600' : 'text-red-500'}`}>
-          {diff >= 0 ? '+' : ''}{diff}
+        <div
+          className={`text-2xl font-bold ${diff >= 0 ? 'text-purple-600' : 'text-red-500'}`}
+        >
+          {diff >= 0 ? '+' : ''}
+          {diff}
           <span className="text-sm font-normal ml-0.5">h</span>
         </div>
       </div>

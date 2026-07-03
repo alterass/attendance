@@ -1,6 +1,6 @@
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
 import '@douyinfe/semi-ui/lib/es/_base/base.css';
 import './global.css';
 import { routeTree } from './routeTree.gen';
