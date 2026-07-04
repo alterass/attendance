@@ -1,11 +1,18 @@
-import { createRouter, RouterProvider } from '@tanstack/react-router';
+import {
+  createHashHistory,
+  createRouter,
+  RouterProvider,
+} from '@tanstack/react-router';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@douyinfe/semi-ui/lib/es/_base/base.css';
 import './global.css';
 import { routeTree } from './routeTree.gen';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  history: createHashHistory(),
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
