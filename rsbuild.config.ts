@@ -5,4 +5,7 @@ import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 // Docs: https://rsbuild.rs/config/
 export default defineConfig({
   plugins: [pluginReact(), pluginTailwindcss()],
+  html: {
+    title: '考勤',
+  },
 });
