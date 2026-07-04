@@ -2,10 +2,12 @@ import { IconChevronLeft, IconChevronRight } from '@douyinfe/semi-icons';
 import { Button, Typography } from '@douyinfe/semi-ui';
 import dayjs from 'dayjs';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { db } from '../db';
 
 interface CalendarViewProps {
+  currentMonth: dayjs.Dayjs;
+  onMonthChange: (month: dayjs.Dayjs) => void;
   onDateClick?: (start: number, end: number) => void;
 }
 
@@ -17,9 +19,11 @@ const typeColorMap: Record<string, string> = {
 
 const weekHeaders = ['一', '二', '三', '四', '五', '六', '日'];
 
-export function CalendarView({ onDateClick }: CalendarViewProps) {
-  const [currentMonth, setCurrentMonth] = useState(dayjs().startOf('month'));
-
+export function CalendarView({
+  currentMonth,
+  onMonthChange,
+  onDateClick,
+}: CalendarViewProps) {
   const monthStart = currentMonth.startOf('month').valueOf();
   const monthEnd = currentMonth.endOf('month').valueOf();
 
@@ -65,8 +69,8 @@ export function CalendarView({ onDateClick }: CalendarViewProps) {
 
   const today = dayjs().startOf('day');
 
-  const handlePrev = () => setCurrentMonth((m) => m.subtract(1, 'month'));
-  const handleNext = () => setCurrentMonth((m) => m.add(1, 'month'));
+  const handlePrev = () => onMonthChange(currentMonth.subtract(1, 'month'));
+  const handleNext = () => onMonthChange(currentMonth.add(1, 'month'));
 
   const handleDayClick = (day: number) => {
     const date = currentMonth.date(day);

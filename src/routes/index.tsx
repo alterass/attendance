@@ -2,6 +2,7 @@ import { IconList, IconPlus } from '@douyinfe/semi-icons';
 import { Button, Space, Typography } from '@douyinfe/semi-ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { CalendarView } from '../components/CalendarView';
 import { ExportButton } from '../components/ExportButton';
 import { MonthStats } from '../components/MonthStats';
@@ -14,6 +15,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const user = useUser();
   const navigate = useNavigate();
+  const [currentMonth, setCurrentMonth] = useState(dayjs().startOf('month'));
 
   if (!user) return null;
 
@@ -40,9 +42,9 @@ function HomePage() {
       {/* 当月统计 */}
       <div className="mb-6">
         <Typography.Title heading={5} className="mb-3! text-gray-700!">
-          {dayjs().format('M月')}统计
+          {currentMonth.format('M月')}统计
         </Typography.Title>
-        <MonthStats />
+        <MonthStats month={currentMonth} />
       </div>
 
       {/* 日历视图 */}
@@ -51,6 +53,8 @@ function HomePage() {
           考勤日历
         </Typography.Title>
         <CalendarView
+          currentMonth={currentMonth}
+          onMonthChange={setCurrentMonth}
           onDateClick={(start, end) => {
             navigate({ to: '/records', search: { from: start, to: end } });
           }}

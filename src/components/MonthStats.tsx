@@ -1,5 +1,5 @@
 import { Typography } from '@douyinfe/semi-ui';
-import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db';
 import { calcHours } from '../utils/time';
@@ -31,10 +31,10 @@ const statsConfig = [
   },
 ];
 
-export function MonthStats() {
+export function MonthStats({ month }: { month: Dayjs }) {
   const stats = useLiveQuery(async () => {
-    const startOfMonth = dayjs().startOf('month').valueOf();
-    const endOfMonth = dayjs().endOf('month').valueOf();
+    const startOfMonth = month.startOf('month').valueOf();
+    const endOfMonth = month.endOf('month').valueOf();
 
     const records = await db.records
       .where('beginTime')
@@ -54,7 +54,7 @@ export function MonthStats() {
       off: Math.round(result.off * 10) / 10,
       leave: Math.round(result.leave * 10) / 10,
     };
-  });
+  }, [month.startOf('month').valueOf(), month.endOf('month').valueOf()]);
 
   if (!stats) return null;
 
