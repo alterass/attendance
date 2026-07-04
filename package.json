@@ -8,8 +8,9 @@
     "check": "biome check --write",
     "dev": "rsbuild --open --port 9981",
     "format": "biome format --write",
-    "preview": "rsbuild preview",
-    "routes": "tsr generate"
+    "preview": "pnpm run build && wrangler dev",
+    "routes": "tsr generate",
+    "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
     "@douyinfe/semi-icons": "^2.100.0",
@@ -33,6 +34,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.107.0"
   }
 }
